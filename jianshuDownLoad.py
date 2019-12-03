@@ -9,6 +9,8 @@ import time
 import sys
 import imghdr
 import urllib3
+import Tkinter as tk  # 使用Tkinter前需要先导入
+from tkFileDialog import *
 
 # 输入文件夹，需要修改路径为简书打包下载后解压出的文件夹
 INPUT_DIR = '这里替换成你的文件路径'
@@ -136,15 +138,55 @@ def walk_dir(dir_name):
             ensure_dir_exist(this_file_output_dir)
             # 处理文件
             start_a_file(a_markdown_file, this_file_output_dir)
+    global workState
+    workState = 0
 
 # filePath = INPUT_DIR + fileName
 # print('filePath={}'.format(filePath))
 
-#系统写入utf-8编码
+
+window = tk.Tk()
+window.title('RxxMarkDown文件图片替换-目前只支持简书')
+window.geometry('500x300')
+
+fileDirEntryText = tk.StringVar()
+fileDirEntryText.set('选择文件路径')
+fileDirEntry = tk.Entry(window, textvariable=fileDirEntryText, font=('Arial', 14))
+#entry_usr_name.place(x=120,y=175)
+fileDirEntry.pack()
+
+fileDirEntry.delete(0, tk.END)  # 将输入框里面的内容清空
+fileDirEntry.insert(0, '选择文件路径')
+filepath = tk.StringVar()
+def filefound():
+    filepath= askdirectory()
+    print filepath
+    fileDirEntry.delete(0, tk.END)  # 将输入框里面的内容清空
+    fileDirEntry.insert(0, filepath)
+findFileText = tk.StringVar(master=None, value="设置文件夹", name=None)
+chooseButton = tk.Button(master=window,textvariable = findFileText, font=('Arial', 14), width=10, height=1, command=filefound)
+chooseButton.pack()
+
+def startDef():
+    global INPUT_DIR
+    INPUT_DIR = fileDirEntry.get()
+    print "INPUT_DIR" + INPUT_DIR
+    global OUTPUT_DIR
+    OUTPUT_DIR = INPUT_DIR + '/output_images'
+    print "OUTPUT_DIR" + OUTPUT_DIR
+    global workState
+    if workState == 0:
+        #workState = 1
+        ensure_dir_exist(OUTPUT_DIR)
+        walk_dir(INPUT_DIR)
+    
+workState = 0
+
+okButton = tk.Button(window, textvariable = tk.StringVar(value="确定"), font=('Arial', 14),width=10, height=1, command = startDef)
+okButton.pack()
+
+
 reload(sys) 
 sys.setdefaultencoding('utf8')
+window.mainloop()
 
-ensure_dir_exist(OUTPUT_DIR)
-
-# start_a_file(filePath)
-walk_dir(INPUT_DIR)
