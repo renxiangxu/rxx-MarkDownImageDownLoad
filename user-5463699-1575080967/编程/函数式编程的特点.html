@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>函数式编程的特点</title>
+    <style type="text/css" media="all">
+      body {
+        margin: 0;
+        font-family: "Helvetica Neue", Helvetica, Arial, "Hiragino Sans GB", sans-serif;
+        font-size: 14px;
+        line-height: 20px;
+        color: #777;
+        background-color: white;
+      }
+      .container {
+        width: 700px;
+        margin-right: auto;
+        margin-left: auto;
+      }
+
+      .post {
+        font-family: Georgia, "Times New Roman", Times, "SimSun", serif;
+        position: relative;
+        padding: 70px;
+        bottom: 0;
+        overflow-y: auto;
+        font-size: 16px;
+        font-weight: normal;
+        line-height: 25px;
+        color: #515151;
+      }
+
+      .post h1{
+        font-size: 50px;
+        font-weight: 500;
+        line-height: 60px;
+        margin-bottom: 40px;
+        color: inherit;
+      }
+
+      .post p {
+        margin: 0 0 35px 0;
+      }
+
+      .post img {
+        border: 1px solid #D9D9D9;
+      }
+
+      .post a {
+        color: #28A1C5;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="post">
+        <h1 class="title">函数式编程的特点</h1>
+        <div class="show-content">
+          <p><b>函数式编程</b></p><p>	函数式编程属于声明式编程的一种，将计算描述为数学函数的求值，但是并没有准确的定义，只是一系列理念，并不需要严格准守，可以理解为函数式编程把程序看做是数学函数，输入的是自变量，输出因变量，通过表达式完成计算。现在越来越多的命令式语言支持部分的函数式编程特性，比如java8中的lambda。</p><p><b>lambda</b><b>表达式</b></p><p>Lambda表达式基于数学中的λ演算得名，直接对应于其中的lambda抽象(lambda abstraction)，是一个匿名函数</p><p>python中的lambda表达式</p><p><br></p><p>foo = [2, 18, 9, 22, 17, 24, 8, 12, 27]</p><p>	print map(lambda x: x * 2 + 10, foo)</p><p>	#[14, 46, 28, 54, 44, 58, 26, 34, 64]</p><p><br></p><p>	javascript</p><p><br></p><p>	var foo = [2, 18, 9, 22, 17, 24, 8, 12, 27];</p><p>	foo.map((v) = &gt; {</p><p>	  return x * 2;</p><p>	})</p><p>	//[14, 46, 28, 54, 44, 58, 26, 34, 64]</p><p><br></p><p>	erlang</p><p><br></p><p>	Foo = [2, 18, 9, 22, 17, 24, 8, 12, 27]，</p><p>lists:map(fun(X) -&gt; X *2 end,Foo).</p><p><br></p><p>	java8</p><p><br></p><p>	List foo = Arrays.asList(2, 18, 9, 22, 17, 24, 8, 12, 27);</p><p>	foo.stream().map((cost) -&gt; cost * 2);</p><p><br></p><p>使用lambda表达式的好处是减少了代码量，而且使程序更加灵活易读，若不使用lambda表达式，对于以上代码，若需要将每个集合里的数变为原来的3倍，那么必须重新编写一套新的代码，使用lambda表达式可以大大增加代码的灵活性。</p><p><b>高阶函数</b></p><p>	在函数式编程中，函数作为一等公民，就是说函数的行为和普通变量没有区别，可以作为函数参数进行传递，也可以在函数内部声明一个函数，那么外层的函数就被称作高阶函数。</p><p>javascript</p><p><br></p><p>	function maps(l,cb){</p><p>	  //函数内部定义函数</p><p>  let func1 = () =&gt;{console.log("function test1")};</p><p>	  function func2(){</p><p>	    console.log("function test2");</p><p>	  }</p><p><br></p><p>	  let temp = []; </p><p>	  for(let i = 0;i</p><p>	    temp.push(cb(l[i])); </p><p>	  }</p><p>	  return temp;</p><p>	}</p><p><br></p><p>	let l = [1,2,3,4,5];</p><p>	//函数作为参数传递</p><p>let re = maps(l,(v) =&gt; {</p><p>	  return v * 2;</p><p>	})</p><p>	console.log(re);</p><p>	// re : [2,4,6,8,10]</p><p><br></p><p>	go</p><p><br></p><p>	func maps(l []int,cb func(v int) int){</p><p>	    for i:=0;i</p><p>	        l[i] = cb(l[i])</p><p>	    }</p><p>	}</p><p><br></p><p>	list := []int{1,2,3,4}</p><p>	maps(list, func(v int) int {</p><p>	    return v *2</p><p>	})</p><p>	// [2,4,6,8]</p><p><br></p><p><b>柯里化</b></p><p>	柯里化(英语：Currying)，把接受多个参数的函数变换成接受一个单一参数的函数，返回接受余下的参数并且返回结果的新函数。</p><p>	比如说在javascript中</p><p><br></p><p>	//不使用柯里化</p><p>function add(a,b){</p><p>	  return a+b;</p><p>	}</p><p>	add(1,2);</p><p><br></p><p>	//currying</p><p>	function add(a){</p><p>	  return (b) =&gt;{</p><p>	     return a+b;</p><p>	  }</p><p>	}</p><p>	add(1)(2)</p><p><br></p><p>柯里化的好处是减少了函数的参数个数，并且模块化了每步计算，与设计模式中的适配器模式（将一个接口转换为另一个接口）类似，并且柯里化的应用之一"惰性求值"也是函数式编程的一个重要特性</p><p><b>一次赋值</b></p><p>	函数式编程要求所有的变量都是常量（这里所用的变量这个词并不准确，只是为了便于理解），erlang是其中的典型语言，虽然许多语言支持部分函数式编程的特性，但是并不要求变量必须是常量。这样的特性提高了编程的复杂度，但是使代码没有副作用，并且带来了很大的一个好处，那就是大大简化了并发编程。就用java来说吧，java中最常用的并发模式是共享内存模型，依赖于线程与锁，若代码编写不当，会发生死锁和竞争条件，并且随着线程数的增加，会占用大量的系统资源。在函数式编程中，因为都是常量，所以根本就不用考虑死锁等情况。为什么说一次赋值提高了编程的复杂度，既然所有变量都是常量，那么我们没办法更改一个变量的值，循环的意义也就不大，所以haskell与erlang中使用递归代替了循环。</p><p>命令式语言中遍历一个数组</p><p>c语言</p><p><br></p><p>int l[5] = {1,2,3,4,5};</p><p>	int i = 0;</p><p>	for(;i&lt;5;i++)</p><p>	{</p><p>	  //some action</p><p>	}</p><p><br></p><p>	erlang</p><p><br></p><p>	loop([]) -&gt; [];</p><p>	loop([H|T]) -&gt;</p><p>	  % some action with   H</p><p>	  loop(T).</p><p><br></p><p>	test() -&gt;</p><p>	  loop([1,2,3,4,5]).</p><p><br></p><p>%在erlang终端中执行test函数</p><p><br></p><p><b>闭包</b></p><p>闭包是指那些能够访问独立(自由)变量的函数 (变量在本地使用，但定义在一个封闭的作用域中)。换句话说，这些函数可以“记忆”它被创建时候的环境。可以看<a href="https://link.jianshu.com/?t=http://stackoverflow.com/questions/111102/how-do-javascript-closures-work" target="_blank">stackoverflow</a>上的大佬怎么回答的。</p><p>javascript代码</p><p><br></p><p>function sayHello() {</p><p>	    let i = 0;</p><p>	    return () =&gt;{</p><p>	        return i ++;</p><p>	    }</p><p>	}</p><p>	let t = sayHello();</p><p>	console.log(t(),t(),t());//0,1,2</p><p>	//闭包会保持其对外部变量的引用</p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
