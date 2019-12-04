@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
-
+import ttk
 import re
 import requests
 import os
@@ -164,7 +164,7 @@ def filefound():
     fileDirEntry.delete(0, tk.END)  # 将输入框里面的内容清空
     fileDirEntry.insert(0, filepath)
 findFileText = tk.StringVar(master=None, value="设置文件夹", name=None)
-chooseButton = tk.Button(master=window,textvariable = findFileText, font=('Arial', 14), width=10, height=1, command=filefound)
+chooseButton = ttk.Button(master=window,textvariable = findFileText,  command=filefound)
 chooseButton.pack()
 
 def startDef():
@@ -182,7 +182,7 @@ def startDef():
     
 workState = 0
 
-okButton = tk.Button(window, textvariable = tk.StringVar(value="确定"), font=('Arial', 14),width=10, height=1, command = startDef)
+okButton = ttk.Button(window, text = "确定",  command = startDef)
 okButton.pack()
 
 
