@@ -310,10 +310,10 @@ return shell_exec("echo $input | $markdown_script");
 代码：
 美丽花儿： 
 
-![美丽花儿](http://ww2.sinaimg.cn/large/56d258bdjw1eugeubg8ujj21kw16odn6.jpg "美丽花儿")
+![美丽花儿](../output_images/56d258bdjw1eugeubg8ujj21kw16odn6.jpg "美丽花儿".jpeg "美丽花儿")
 
 显示效果：
-美丽花儿： ![美丽花儿](http://upload-images.jianshu.io/upload_images/5463699-5c1b0ee204e45179.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+美丽花儿： ![美丽花儿](../output_images/5463699-5c1b0ee204e45179.jpg.jpeg)
 7.2. 参考式
 语法说明：
 在文档要插入图片的地方写![图片Alt][标记]
@@ -323,10 +323,10 @@ return shell_exec("echo $input | $markdown_script");
 
 ![美丽花儿][flower]
 
-[flower]:http://ww2.sinaimg.cn/large/56d258bdjw1eugeubg8ujj21kw16odn6.jpg "美丽花儿"
+[flower]:../output_images/56d258bdjw1eugeubg8ujj21kw16odn6.jpg "美丽花儿".jpeg "美丽花儿"
 
 显示效果：
-美丽花儿： ![美丽花儿](http://upload-images.jianshu.io/upload_images/5463699-5c1b0ee204e45179.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+美丽花儿： ![美丽花儿](../output_images/5463699-5c1b0ee204e45179.jpg.jpeg)
 8. 内容目录
 在段落中填写 [TOC]
  以显示全文内容的目录结构。
