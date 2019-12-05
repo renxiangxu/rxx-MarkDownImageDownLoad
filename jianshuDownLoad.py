@@ -80,7 +80,20 @@ def modify_md_content(a_markdown_file, img_local_path, img_url, suffix):
 
     md_file_path = a_markdown_file 
     copy_md_file_path = a_markdown_file + "_copy" +"md"
-
+    
+    #处理多层路径问题
+    tmpFileDir = os.path.dirname(a_markdown_file)
+    
+    fileDeep = len(tmpFileDir.split("/"))
+    imageDeep = len(OUTPUT_DIR.split("/"))
+    
+    if fileDeep + imageDeep == 0:
+        fileDeep = len(tmpFileDir.split("\\"))
+        imageDeep = len(OUTPUT_DIR.split("\\"))  
+        
+    XiangDuiDeepNum = fileDeep - imageDeep + 1 
+    
+    
     # 打开md文件然后进行替换
     with io.open(md_file_path, 'r', encoding='utf-8') as fr:
         with io.open(copy_md_file_path, 'w', encoding='utf-8') as fw:
@@ -90,7 +103,12 @@ def modify_md_content(a_markdown_file, img_local_path, img_url, suffix):
             # data = re.sub('<br>', '', data)
             print "替换::::::" + img_url
             print "替换2::::::" + img_local_path
-            img_local_path = "../" + img_local_path + "." + suffix
+            
+            xianduiDir = ""
+            for i in range(XiangDuiDeepNum):
+                xianduiDir = xianduiDir + "../"
+                
+            img_local_path = xianduiDir + img_local_path + "." + suffix
             # data = re.sub(img_url, img_local_path, data)
             data = data.replace(img_url, img_local_path)
 
