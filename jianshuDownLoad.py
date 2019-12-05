@@ -16,7 +16,8 @@ from tkFileDialog import *
 INPUT_DIR = '这里替换成你的文件路径'
 
 # 输出文件夹，不需要修改，默认为根路径下的output_images文件夹，不然文章的链接会定位不到
-OUTPUT_DIR = INPUT_DIR + '/output_images'
+#OUTPUT_DIR = INPUT_DIR + '/output_images'
+OUTPUT_DIR = os.path.join( INPUT_DIR, "output_images")
 
 pool_manager = urllib3.PoolManager()
 
@@ -63,7 +64,8 @@ def process_line(line, output_dir, a_markdown_file):
             title =  a_markdown_file.rsplit('/',1)[1]
             title = title.split(".")[0]
             print "title:::::" + title
-            new_name = "output_images" + "/"  + os.path.basename(img_url)
+            new_name = os.path.join("output_images" , os.path.basename(img_url))
+            #new_name = "output_images" + "/"  + os.path.basename(img_url)
             print "new_name:::::" + new_name
             print "img_url:::::" + img_url
             print "----------------"
@@ -111,7 +113,8 @@ def download_image_file(url, output_dir):
     suffix = imghdr.what(None, response.data);
     if imghdr.what(None, response.data) is None:
         suffix = "jpeg"
-    new_name = output_dir + "/" + os.path.basename(url) + "." + suffix
+    new_name = os.path.join(output_dir, os.path.basename(url)) + "." + suffix  
+    #new_name = output_dir + "/" + os.path.basename(url) + "." + suffix
     with open(new_name, 'wb') as f:
         f.write(img)
         print(" # 写入DONE")
@@ -121,7 +124,13 @@ def walk_dir(dir_name):
     for root, dirs, files in os.walk(dir_name):
         relative_name = root.replace(INPUT_DIR, '')
         print('  root={}'.format(relative_name))
-        ensure_dir_exist(OUTPUT_DIR + "/" + relative_name)
+        
+        #这里根据文件夹的子文件夹创建子文件夹，因为可能出现中文，就不要了
+        #tmpDir = os.path.join(OUTPUT_DIR, relative_name)
+        #print("xxxxxxxxxxxx" + tmpDir)
+        #ensure_dir_exist(tmpDir)
+        #ensure_dir_exist(OUTPUT_DIR + "/" + relative_name)
+        
         for f in files:
             print('   file = {}'.format(f))
             if f.split('.')[-1] != 'md':
@@ -170,10 +179,10 @@ chooseButton.pack()
 def startDef():
     global INPUT_DIR
     INPUT_DIR = fileDirEntry.get()
-    print "INPUT_DIR" + INPUT_DIR
+    print ("INPUT_DIR" + INPUT_DIR)
     global OUTPUT_DIR
     OUTPUT_DIR = INPUT_DIR + '/output_images'
-    print "OUTPUT_DIR" + OUTPUT_DIR
+    print ("OUTPUT_DIR" + OUTPUT_DIR)
     global workState
     if workState == 0:
         #workState = 1
