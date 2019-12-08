@@ -49,26 +49,26 @@ def process_line(line, output_dir, a_markdown_file):
         return
     img_list = re.findall(r"\!\[[^\]]*\]\((.+?)\)", line, re.S)
     for iu in img_list:
-        print "-------------"
+        print ("-------------")
         img_url = iu.split('?')[0]
 
         oldName = iu.split(' ')[0]
-        print "img_url:::::" + img_url
-        print "oldName:::::" + oldName
+        print ("img_url:::::" + img_url)
+        print ("oldName:::::" + oldName)
         print('[Process:]' + img_url)
 
         if img_url.startswith(('http://', 'https://')):
             suffix = download_image_file(img_url, output_dir)
             #替换原来的链接
-            print "a_markdown_file:::::" + a_markdown_file
+            print ("a_markdown_file:::::" + a_markdown_file)
             title =  a_markdown_file.rsplit('/',1)[1]
             title = title.split(".")[0]
-            print "title:::::" + title
+            print ("title:::::" + title)
             new_name = os.path.join("output_images" , os.path.basename(img_url))
             #new_name = "output_images" + "/"  + os.path.basename(img_url)
-            print "new_name:::::" + new_name
-            print "img_url:::::" + img_url
-            print "----------------"
+            print ("new_name:::::" + new_name)
+            print ("img_url:::::" + img_url)
+            print ("----------------")
             # print "路径6666= " + output_dir
             # print "路径7777= " + new_name
             modify_md_content(a_markdown_file,new_name ,oldName, suffix) 
@@ -101,8 +101,8 @@ def modify_md_content(a_markdown_file, img_local_path, img_url, suffix):
             # data = re.sub('\(/配图/', '(配图/', data)
             # data = re.sub('<br>', '<br>\n', data)
             # data = re.sub('<br>', '', data)
-            print "替换::::::" + img_url
-            print "替换2::::::" + img_local_path
+            print ("替换::::::" + img_url)
+            print ("替换2::::::" + img_local_path)
             
             xianduiDir = ""
             for i in range(XiangDuiDeepNum):
@@ -187,7 +187,7 @@ fileDirEntry.insert(0, '选择文件路径')
 filepath = tk.StringVar()
 def filefound():
     filepath= askdirectory()
-    print filepath
+    print (filepath)
     fileDirEntry.delete(0, tk.END)  # 将输入框里面的内容清空
     fileDirEntry.insert(0, filepath)
 findFileText = tk.StringVar(master=None, value="设置文件夹", name=None)

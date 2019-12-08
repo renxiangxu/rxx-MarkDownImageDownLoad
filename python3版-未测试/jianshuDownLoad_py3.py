@@ -1,22 +1,27 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
-import ttk
+from tkinter import ttk
 import re
-import requests
+import urllib.request as request
 import os
 import io
 import time
 import sys
 import imghdr
 import urllib3
-import Tkinter as tk  # 使用Tkinter前需要先导入
-from tkFileDialog import *
+import tkinter as tk  # 使用Tkinter前需要先导入
+import tkinter.filedialog
+from tkinter import *
+from tkinter.filedialog import askdirectory
+
+
 
 # 输入文件夹，需要修改路径为简书打包下载后解压出的文件夹
 INPUT_DIR = '这里替换成你的文件路径'
 
 # 输出文件夹，不需要修改，默认为根路径下的output_images文件夹，不然文章的链接会定位不到
-OUTPUT_DIR = INPUT_DIR + '/output_images'
+#OUTPUT_DIR = INPUT_DIR + '/output_images'
+OUTPUT_DIR = os.path.join( INPUT_DIR, "output_images")
 
 pool_manager = urllib3.PoolManager()
 
@@ -28,7 +33,7 @@ def ensure_dir_exist(dir_name):
         print("{} 存在，无需新创建。".format(dir_name))
 
 def start_a_file(a_markdown_file, output_dir):
-    f = open(a_markdown_file)
+    f = open(a_markdown_file, "rb")
     line = f.readline()
     i = 0
     while 1:
@@ -48,25 +53,26 @@ def process_line(line, output_dir, a_markdown_file):
         return
     img_list = re.findall(r"\!\[[^\]]*\]\((.+?)\)", line, re.S)
     for iu in img_list:
-        # print "-------------"
+        print ("-------------")
         img_url = iu.split('?')[0]
 
         oldName = iu.split(' ')[0]
-        # print "img_url:::::" + img_url
-        # print "oldName:::::" + oldName
+        print ("img_url:::::" + img_url)
+        print ("oldName:::::" + oldName)
         print('[Process:]' + img_url)
 
         if img_url.startswith(('http://', 'https://')):
             suffix = download_image_file(img_url, output_dir)
             #替换原来的链接
-            # print "a_markdown_file:::::" + a_markdown_file
+            print ("a_markdown_file:::::" + a_markdown_file)
             title =  a_markdown_file.rsplit('/',1)[1]
             title = title.split(".")[0]
-            # print "title:::::" + title
-            new_name = "output_images" + "/"  + os.path.basename(img_url)
-            # print "new_name:::::" + new_name
-            # print "img_url:::::" + img_url
-            # print "----------------"
+            print ("title:::::" + title)
+            new_name = os.path.join("output_images" , os.path.basename(img_url))
+            #new_name = "output_images" + "/"  + os.path.basename(img_url)
+            print ("new_name:::::" + new_name)
+            print ("img_url:::::" + img_url)
+            print ("----------------")
             # print "路径6666= " + output_dir
             # print "路径7777= " + new_name
             modify_md_content(a_markdown_file,new_name ,oldName, suffix) 
@@ -78,17 +84,35 @@ def modify_md_content(a_markdown_file, img_local_path, img_url, suffix):
 
     md_file_path = a_markdown_file 
     copy_md_file_path = a_markdown_file + "_copy" +"md"
-
+    
+    #处理多层路径问题
+    tmpFileDir = os.path.dirname(a_markdown_file)
+    
+    fileDeep = len(tmpFileDir.split("/"))
+    imageDeep = len(OUTPUT_DIR.split("/"))
+    
+    if fileDeep + imageDeep == 0:
+        fileDeep = len(tmpFileDir.split("\\"))
+        imageDeep = len(OUTPUT_DIR.split("\\"))  
+        
+    XiangDuiDeepNum = fileDeep - imageDeep + 1 
+    
+    
     # 打开md文件然后进行替换
-    with io.open(md_file_path, 'r', encoding='utf-8') as fr:
-        with io.open(copy_md_file_path, 'w', encoding='utf-8') as fw:
+    with io.open(md_file_path, 'rb', encoding='utf-8') as fr:
+        with io.open(copy_md_file_path, 'rw', encoding='utf-8') as fw:
             data = fr.read()
             # data = re.sub('\(/配图/', '(配图/', data)
             # data = re.sub('<br>', '<br>\n', data)
             # data = re.sub('<br>', '', data)
-            # print "替换::::::" + img_url
-            # print "替换2::::::" + img_local_path
-            img_local_path = "../" + img_local_path + "." + suffix
+            print ("替换::::::" + img_url)
+            print ("替换2::::::" + img_local_path)
+            
+            xianduiDir = ""
+            for i in range(XiangDuiDeepNum):
+                xianduiDir = xianduiDir + "../"
+                
+            img_local_path = xianduiDir + img_local_path + "." + suffix
             # data = re.sub(img_url, img_local_path, data)
             data = data.replace(img_url, img_local_path)
 
@@ -111,7 +135,8 @@ def download_image_file(url, output_dir):
     suffix = imghdr.what(None, response.data);
     if imghdr.what(None, response.data) is None:
         suffix = "jpeg"
-    new_name = output_dir + "/" + os.path.basename(url) + "." + suffix
+    new_name = os.path.join(output_dir, os.path.basename(url)) + "." + suffix  
+    #new_name = output_dir + "/" + os.path.basename(url) + "." + suffix
     with open(new_name, 'wb') as f:
         f.write(img)
         print(" # 写入DONE")
@@ -121,7 +146,13 @@ def walk_dir(dir_name):
     for root, dirs, files in os.walk(dir_name):
         relative_name = root.replace(INPUT_DIR, '')
         print('  root={}'.format(relative_name))
-        ensure_dir_exist(OUTPUT_DIR + "/" + relative_name)
+        
+        #这里根据文件夹的子文件夹创建子文件夹，因为可能出现中文，就不要了
+        #tmpDir = os.path.join(OUTPUT_DIR, relative_name)
+        #print("xxxxxxxxxxxx" + tmpDir)
+        #ensure_dir_exist(tmpDir)
+        #ensure_dir_exist(OUTPUT_DIR + "/" + relative_name)
+        
         for f in files:
             print('   file = {}'.format(f))
             if f.split('.')[-1] != 'md':
@@ -186,7 +217,6 @@ okButton = ttk.Button(window, text = "确定",  command = startDef)
 okButton.pack()
 
 
-reload(sys) 
-sys.setdefaultencoding('utf8')
+
 window.mainloop()
 
