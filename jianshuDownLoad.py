@@ -93,7 +93,7 @@ def modify_md_content(a_markdown_file, img_local_path, img_url, suffix):
         
     XiangDuiDeepNum = fileDeep - imageDeep + 1 
     
-    
+      
     # 打开md文件然后进行替换
     with io.open(md_file_path, 'r', encoding='utf-8') as fr:
         with io.open(copy_md_file_path, 'w', encoding='utf-8') as fw:
