@@ -78,6 +78,7 @@ def process_line(line, output_dir, a_markdown_file):
 
 def modify_md_content(a_markdown_file, img_local_path, img_url, suffix):
 
+
     md_file_path = a_markdown_file 
     copy_md_file_path = a_markdown_file + "_copy" +"md"
     
